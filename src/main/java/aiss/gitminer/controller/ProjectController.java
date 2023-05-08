@@ -39,7 +39,7 @@ public class ProjectController {
         // TODO: COMPLETE
         Project _project = projectRepository
                             .save(new Project(project.getId(), project.getName(), project.getWebUrl(), project.getCommits(), project.getIssues()));
-        return project;
+        return _project;
     }
 
     // PUT http://localhost:8080/api/projects/{id}
