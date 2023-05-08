@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import aiss.gitminer.model.Project;
 
 @Repository
-public interface ProjectRepository extends JpaRepository<Project,String> {
+public interface ProjectRepository extends JpaRepository<Project, String> {
     
 }
