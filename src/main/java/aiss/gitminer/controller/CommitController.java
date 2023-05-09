@@ -121,4 +121,14 @@ public class CommitController {
         return commits;
     }
 
+
+
+
+// esto hay que cambiarlo
+@GetMapping
+public List<Commit> findAll() {
+    return commitRepository.findAll();
+}
+
+
 }

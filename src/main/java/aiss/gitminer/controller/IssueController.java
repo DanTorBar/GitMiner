@@ -171,4 +171,14 @@ public class IssueController {
         return issues;
     }
 
+
+    // esto hay que cambiarlo
+    @GetMapping
+    public List<Issue> findAll() {
+        return issueRepository.findAll();
+    }
+
+
+
+
 }
