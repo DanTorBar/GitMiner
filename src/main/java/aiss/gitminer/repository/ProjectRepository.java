@@ -9,5 +9,4 @@ import aiss.gitminer.model.Project;
 
 @Repository
 public interface ProjectRepository extends JpaRepository<Project,String> {
-    Page<Project> findByName(String name, Pageable pageable);
 }
