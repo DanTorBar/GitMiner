@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.security.auth.message.callback.PrivateKeyCallback.IssuerSerialNumRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -55,10 +53,8 @@ public class IssueController {
         @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = Issue.class), mediaType = "application/json")}),
     })
     @GetMapping
-    // public List<Issue> findAll() {
-    //     return issueRepository.findAll();
-    // }
-    public List<Issue> findAll(  @RequestParam(required = false) String title,
+    public List<Issue> findAll(  @RequestParam(required = false) String authorId,
+                                 @RequestParam(required = false) String state,
                                  @RequestParam(required = false) String order,
                                  @RequestParam(defaultValue = "0") int page,
                                  @RequestParam(defaultValue = "10") int size) {
@@ -75,19 +71,23 @@ public class IssueController {
             paging = PageRequest.of(page, size); 
         }
 
-        Page<Issue> pageProjects;
+        Page<Issue> pageIssuesS;
+        Page<Issue> pageIssuesA;
 
-        if(title == null) {
-            pageProjects = issueRepository.findAll(paging);
+        if(state == null) {
+            pageIssuesS = issueRepository.findAll(paging);            
         } else {
-            pageProjects = issueRepository.findByTitle(title, paging);
+            pageIssuesS = issueRepository.findByState(state, paging);
+        }
+        if(authorId == null) {
+            pageIssuesA = issueRepository.findAll(paging);            
+        } else {
+            pageIssuesA = issueRepository.findByAuthor(userRepository.findById(authorId).get(), paging);
         }
 
-        return pageProjects.getContent();
+        return pageIssuesS.getContent().stream().filter(i -> pageIssuesA.getContent().contains(i)).collect(Collectors.toList());
 
     }
-    
-
     
     // GET Get issues by ID --> http://localhost:8080/gitminer/issues/{id}
     @Operation (
@@ -119,7 +119,7 @@ public class IssueController {
         @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = Issue.class), mediaType = "application/json")}),
         @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema())})
     })
-    @GetMapping("/issues/{id}/comments")
+    @GetMapping("/{id}/comments")
     public List<Comment> getCommentsFromIssue(@Parameter(description = "id of the issue which comments are going to be searched") @PathVariable (value = "id") String id) throws IssueNotFoundException {
        Optional<Issue> issue = issueRepository.findById(id);
        if(!issue.isPresent()) {
@@ -127,31 +127,6 @@ public class IssueController {
        }
        List<Comment> comments = new ArrayList<>(issue.get().getComments());
        return comments;
-    }
-    
-
-    // GET Get issues by author id --> http://localhost:8080/gitminer/issues?authorId={id}
-    @GetMapping("/issues")
-    public List<Issue> findCommentsByAuthor(@RequestParam(value="author_id", required = false) String author_id) {
-        List<Issue> issues = findAll();
-        if (author_id != null) {
-            issues = issues.stream()
-                             .filter(i -> i.getAuthor().getId().equals(authorId))
-                             .collect(Collectors.toList());
-        } 
-        return issues;
-    }
-
-    // GET Get issues by state --> http://localhost:8080/gitminer/issues?state={state}
-    @GetMapping("/issues")
-    public List<Issue> findCommentsByState(@RequestParam(value="state", required = false) String state) {
-        List<Issue> issues = findAll();
-        if (state != null) {
-            issues = issues.stream()
-                             .filter(x -> x.getState().equals(state))
-                             .collect(Collectors.toList());
-        }            
-        return issues;
     }
 
 }
