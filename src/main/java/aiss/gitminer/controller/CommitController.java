@@ -5,6 +5,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,8 +47,36 @@ public class CommitController {
         @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = Commit.class), mediaType = "application/json")}),
     })
     @GetMapping
-    public List<Commit> findAll() {
-        return commitRepository.findAll();
+    // public List<Commit> findAll() {
+    //     return commitRepository.findAll();
+    // }
+    public List<Commit> findAll( @RequestParam(required = false) String title,
+                                 @RequestParam(required = false) String order,
+                                 @RequestParam(defaultValue = "0") int page,
+                                 @RequestParam(defaultValue = "10") int size) {
+
+        Pageable paging;
+
+        if(order != null) {
+            if(order.startsWith("-")) {
+                paging = PageRequest.of(page, size, Sort.by(order.substring(1)).descending());
+            } else {
+                paging = PageRequest.of(page, size, Sort.by(order).ascending());
+            }
+        } else {
+            paging = PageRequest.of(page, size); 
+        }
+
+        Page<Commit> pageProjects;
+
+        if(title == null) {
+            pageProjects = commitRepository.findAll(paging);
+        } else {
+            pageProjects = commitRepository.findByTitle(title, paging);
+        }
+
+        return pageProjects.getContent();
+
     }
 
 
