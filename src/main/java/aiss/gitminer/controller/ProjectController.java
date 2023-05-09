@@ -22,14 +22,14 @@ public class ProjectController {
     @GetMapping
     public List<Project> findAll() {
         // TODO: COMPLETE
-        return null;
+        return projectRepository.findAll();
     }
 
     // GET http://localhost:8080/api/projects/{id}
     @GetMapping("/{id}")
-    public Project findOne(@PathVariable Long id) {
+    public Project findOne(@PathVariable String id) {
         // TODO: COMPLETE
-        return null;
+        return projectRepository.findById(id).get();
     }
 
     // POST http://localhost:8080/api/projects
@@ -40,21 +40,6 @@ public class ProjectController {
         Project _project = projectRepository
                             .save(new Project(project.getId(), project.getName(), project.getWebUrl(), project.getCommits(), project.getIssues()));
         return _project;
-    }
-
-    // PUT http://localhost:8080/api/projects/{id}
-    @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateProject(@RequestBody @Valid Project updatedProject, @PathVariable Long id) {
-        // TODO: COMPLETE
-
-    }
-
-    // DELETE http://localhost:8080/api/projects/{id}
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteProject(@PathVariable Long id) {
-        // TODO: COMPLETE
     }
 
 }
