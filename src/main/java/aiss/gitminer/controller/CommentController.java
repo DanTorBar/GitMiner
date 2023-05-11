@@ -84,7 +84,7 @@ public class CommentController {
     @Operation (
         summary = "Retrieve a comment by id",
         description = "Get a comment object by specifying its id",
-        tags = { "comment", "get" }
+        tags = { "comments", "get" }
     )
     @ApiResponses ({
         @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = Comment.class), mediaType = "application/json")}),
