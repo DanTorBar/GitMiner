@@ -2,18 +2,28 @@ package aiss.gitminer.controller;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import aiss.gitminer.exception.CommitNotFoundException;
 import aiss.gitminer.model.Commit;
 import aiss.gitminer.repository.CommitRepository;
 import aiss.gitminer.repository.ProjectRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @RestController
 @RequestMapping("/gitminer/commits")
@@ -55,10 +65,10 @@ public class CommitController {
 
         Page<Commit> pageProjects;
 
-        if(title == null) {
+        if(email == null) {
             pageProjects = commitRepository.findAll(paging);
         } else {
-            pageProjects = commitRepository.findByEmail(email, paging);
+            pageProjects = commitRepository.findByAuthorEmail(email, paging);
         }
 
         return pageProjects.getContent();

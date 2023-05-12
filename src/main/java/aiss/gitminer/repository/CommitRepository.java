@@ -9,5 +9,5 @@ import aiss.gitminer.model.Commit;
 
 @Repository
 public interface CommitRepository extends JpaRepository<Commit,String> {
-    Page<Commit> findByEmail(String email, Pageable pageable);
+    Page<Commit> findByAuthorEmail(String authorEmail, Pageable pageable);
 }
