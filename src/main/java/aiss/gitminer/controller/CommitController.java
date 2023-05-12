@@ -8,8 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import aiss.gitminer.exception.CommitNotFoundException;
 import aiss.gitminer.model.Commit;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import aiss.gitminer.repository.CommitRepository;
 import aiss.gitminer.repository.ProjectRepository;
 import io.swagger.v3.oas.annotations.Operation;
@@ -47,10 +47,10 @@ public class CommitController {
 
     // GET get commit by email address --> http://localhost:8080/gitminer/commits?email={emailAddress}
     @GetMapping
-    public List<Commit> findCommits(@RequestParam(required = false) String email,
-                                     @RequestParam(required = false) String order,
-                                     @RequestParam(defaultValue = "0") int page,
-                                     @RequestParam(defaultValue = "10") int size) {
+    public List<Commit> findAll(@RequestParam(required = false) String email,
+                                @RequestParam(required = false) String order,
+                                @RequestParam(defaultValue = "0") int page,
+                                @RequestParam(defaultValue = "10") int size) {
         Pageable paging;
 
         if(order != null) {
@@ -78,7 +78,7 @@ public class CommitController {
     @Operation (
         summary = "Retrieve a commit by id",
         description = "Get a commit object by specifying its id",
-        tags = { "commit", "get" }
+        tags = { "commits", "get" }
     )
     @ApiResponses ({
         @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = Commit.class), mediaType = "application/json")}),

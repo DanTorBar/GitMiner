@@ -93,7 +93,7 @@ public class IssueController {
     @Operation (
         summary = "Retrieve a issue by id",
         description = "Get a issue object by specifying its id",
-        tags = { "issue", "get" }
+        tags = { "issues", "get" }
     )
     @ApiResponses ({
         @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = Issue.class), mediaType = "application/json")}),
