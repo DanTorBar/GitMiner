@@ -43,7 +43,7 @@ public class ProjectController {
     @Operation (
         summary = "Insert a project",
         description = "Add a new project whose data is passed in the body of the request in JSON format",
-        tags = { "projects", "post" }
+        tags = { "post", "project" }
     )
     @ApiResponses ({
         @ApiResponse(responseCode = "201", content = { @Content(schema = @Schema(implementation = Project.class), mediaType = "application/json")}),
@@ -61,7 +61,7 @@ public class ProjectController {
     @Operation (
         summary = "Retrieve all projects",
         description = "Get all projects",
-        tags = { "projects", "get" }
+        tags = { "get", "projects" }
     )
     @ApiResponses ({
         @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = Project.class), mediaType = "application/json")}),
