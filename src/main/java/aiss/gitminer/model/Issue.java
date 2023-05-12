@@ -4,6 +4,8 @@ package aiss.gitminer.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+
 import java.util.List;
 
 @Entity
@@ -16,34 +18,45 @@ public class Issue {
 
     @JsonProperty("ref_id")
     private String refId;
+
     @JsonProperty("title")
     private String title;
+    
     @JsonProperty("description")
     @Column(columnDefinition="TEXT")
     private String description;
+    
     @JsonProperty("state")
     private String state;
 
     @JsonProperty("created_at")
+    @NotEmpty(message = "Created date cannot be empty.")
     private String createdAt;
+    
     @JsonProperty("updated_at")
     private String updatedAt;
+    
     @JsonProperty("closed_at")
     private String closedAt;
+    
     @JsonProperty("labels")
     @ElementCollection
     private List<String> labels;
+    
     @JsonProperty("author")
     //@NotEmpty(message = "The author of the issue cannot be empty")
     @JoinColumn(name = "author_id",referencedColumnName = "id")
     @OneToOne(cascade=CascadeType.ALL)
     private User author;
+    
     @JsonProperty("assignee")
     @JoinColumn(name = "assignee_id",referencedColumnName = "id")
     @OneToOne(cascade=CascadeType.ALL)
     private User assignee;
+    
     @JsonProperty("upvotes")
     private Integer upvotes;
+    
     @JsonProperty("downvotes")
     private Integer downvotes;
 
